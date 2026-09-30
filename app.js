@@ -6,6 +6,11 @@
 
 // Where data files live; an embed (e.g. Google Sites) points this at a CDN copy of the site.
 const ASSET_BASE = (typeof window.TG_ASSET_BASE === "string") ? window.TG_ASSET_BASE : "";
+// Embedded (Google Sites): always the dark navy look, and a slim brand bar instead of the full menu.
+if (typeof window.TG_ASSET_BASE === "string") {
+  document.documentElement.setAttribute("data-theme", "dark");
+  document.documentElement.classList.add("embedded");
+}
 
 const C = { first: "Tanner", last: "Grey", party: "Republican", state: "Arkansas", year: "2028" };
 

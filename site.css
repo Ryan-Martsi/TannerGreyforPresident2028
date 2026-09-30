@@ -525,3 +525,13 @@ table.arsenal td { color: var(--ink-2); }
 .argument p { color: var(--ink-2); font-size: 17px; }
 .argument strong { color: var(--ink); }
 .ext { color: var(--ink-3); font-size: .8em; }
+
+/* ---------- embedded in Google Sites ----------
+   Google's menu handles the pages; keep the brand bar and the Grey Doctrine button.
+   These out-rank the embed code's own "hide the header" rule. */
+html.embedded body .tricolor { display: block !important; }
+html.embedded body .masthead { display: block !important; }
+html.embedded body .masthead .nav { display: flex !important; position: static; flex-direction: row; background: none; padding: 0; border: 0; margin-left: auto; }
+html.embedded body .masthead .nav a:not(.cta) { display: none; }
+html.embedded body .masthead .nav .cta { margin-left: 0; }
+html.embedded body .menu-btn { display: none !important; }
