@@ -1595,6 +1595,24 @@ let lastRouteRendered = null;
 
 window.addEventListener("hashchange", render);
 
+// Embedded (Google Sites) pages live in a srcdoc frame, where "#route" links resolve against
+// Google's frame URL and the browser drops them. Route those clicks ourselves.
+function go(route) {
+  try { history.pushState(null, "", "#" + route); }
+  catch { try { location.hash = route; return; } catch {} }
+  render();
+}
+if (document.documentElement.classList.contains("embedded")) {
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    e.preventDefault();
+    go(a.getAttribute("href").slice(1) || "home");
+  });
+  window.addEventListener("popstate", render);
+}
+
 (async function boot() {
   try { const r = sessionStorage.getItem("tg-route"); if (r) { sessionStorage.removeItem("tg-route"); if (!location.hash) history.replaceState(null, "", r); } } catch {}
   const inline = readInline();
