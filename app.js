@@ -4,6 +4,9 @@
 (() => {
 "use strict";
 
+// Where data files live; an embed (e.g. Google Sites) points this at a CDN copy of the site.
+const ASSET_BASE = (typeof window.TG_ASSET_BASE === "string") ? window.TG_ASSET_BASE : "";
+
 const C = { first: "Tanner", last: "Grey", party: "Republican", state: "Arkansas", year: "2028" };
 
 /* ------------------------------------------------------------------ utils */
@@ -1071,7 +1074,7 @@ function initMap() {
   if (initMap.world) draw(initMap.world);
   else {
     $("#map-panel").innerHTML = `<p class="eyebrow">Loading map…</p>`;
-    fetch("world-110m.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    fetch(ASSET_BASE + "world-110m.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then((w) => { initMap.world = w; if ($("#map") === svgEl) draw(w); })
       .catch(() => { $("#map-panel").innerHTML = `<p>The map data could not be loaded. Reload the page to try again.</p>`; });
   }
@@ -1483,7 +1486,7 @@ function readInline() {
 async function loadArticles() {
   const inline = readInline();
   let file = null;
-  try { const r = await fetch("articles.json", { cache: "no-store" }); if (r.ok) file = await r.json(); } catch {}
+  try { const r = await fetch(ASSET_BASE + "articles.json", { cache: "no-store" }); if (r.ok) file = await r.json(); } catch {}
   const pick = [inline, file].filter((d) => d && Array.isArray(d.items)).sort((a, b) => (b.updated || 0) - (a.updated || 0))[0];
   if (pick) { state.articles = pick.items; state.updated = pick.updated || 0; }
 }
