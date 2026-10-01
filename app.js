@@ -1617,7 +1617,14 @@ if (document.documentElement.classList.contains("embedded")) {
   try { const r = sessionStorage.getItem("tg-route"); if (r) { sessionStorage.removeItem("tg-route"); if (!location.hash) history.replaceState(null, "", r); } } catch {}
   const inline = readInline();
   if (inline) { state.articles = inline.items; state.updated = inline.updated || 0; }
-  render();
+  try {
+    render();
+    window.__tgBooted = true;
+  } catch (err) {
+    // Say what broke on screen instead of leaving a blank page.
+    $("#app").innerHTML = `<div style="padding:40px;font:16px system-ui,sans-serif;color:#e7ecf4;background:#0a111c">The page hit an error while loading: <code>${esc(err && err.message || err)}</code>. Try reloading the page.</div>`;
+    return;
+  }
   await loadArticles();
   const r = currentRoute();
   if (r === "home" || r === "newsroom" || r.startsWith("article-")) render();
